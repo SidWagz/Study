@@ -7,7 +7,7 @@ typedef int bool;
 #define false 0
 
 // Define new node definition
-// Store viod type data
+// Store void type data
 // next is pointer to next node in chain
 typedef struct Node Node;
 struct Node
@@ -34,6 +34,7 @@ int get_val(Node*);
 int list_length();
 void insert_node(int);
 void delete_node(int);
+void swap_nodes(int, int);
 
 //Print the list chain
 void print_list() {
@@ -49,6 +50,8 @@ void print_list() {
 
 //Get value from Node
 int get_val(Node* node) {
+	if (node == NULL)
+		return -1;
 	return *(int*)(node->val);
 }
 
@@ -92,22 +95,75 @@ void delete_node(int n) {
 		current = current->next;
 	}
 
-	if (current == NULL)
+	if (current == NULL) {
 		printf("Cannot find node %d - List is empty\n\n", n);
-	
-	else if (get_val(current) != n)
-		printf("Cannot find node %d - Not in list\n\n", n);
-	
-	else {
-		Node* t = current;
-		if (prev == NULL) {
-			ROOT = current->next;
-		}
-		else {
-			prev->next = current->next;
-		}
-		free(t);
+		return;
 	}
+	
+	if (get_val(current) != n) {
+		printf("Cannot find node %d - Not in list\n\n", n);
+		return;
+	}
+	
+	Node* t = current;
+	if (prev == NULL) {
+		ROOT = current->next;
+	}
+	else {
+		prev->next = current->next;
+	}	
+}
+
+//Swap the two nodes if both node values exist in the list
+void swap_nodes(int a, int b) {
+	Node *prev_a = NULL, *curr_a = ROOT;
+	Node *prev_b = NULL, *curr_b = ROOT;
+
+	while (curr_a->next != NULL
+				&& get_val(curr_a) != a) {
+		prev_a = curr_a;
+		curr_a = curr_a->next;
+	}
+
+	while (curr_b->next != NULL
+				&& get_val(curr_b) != b) {
+		prev_b = curr_b;
+		curr_b = curr_b->next;
+	}
+
+	if (curr_a == NULL || curr_b == NULL) {
+		printf("Cannot find nodes %d and %d - List is empty\n\n", a, b);
+		return;
+	}
+
+	if (get_val(curr_a) != a) {
+		printf("Cannot find node %d = Not in List\n\n", a);
+		return;
+	}
+	else if (get_val(curr_b) != b) {
+		printf("Cannot find node %d = Not in List\n\n", b);
+		return;
+	}
+
+	if (prev_a == NULL) {
+		ROOT = curr_b;
+	}
+	else {
+		prev_a->next = curr_b;
+	}
+	
+	if (prev_b == NULL) {
+		ROOT = curr_a;
+	}
+	else {
+		prev_b->next = curr_a;
+	}
+
+	Node *t = curr_a->next;
+	curr_a->next = curr_b->next;
+	curr_b->next = t;
+
+	return;
 }
 
 int main() {
@@ -138,6 +194,50 @@ int main() {
 
 	//Delete element not in list
 	delete_node(5);
+	printf("Length of list is %d\n\n", list_length());
+	print_list();
+
+	//Prepare list for swap
+	insert_node(1);
+	insert_node(2);
+	insert_node(5);
+	insert_node(4);
+	
+	printf("Length of list is %d\n\n", list_length());
+	print_list();
+
+	//Swap values 5 and 1 (between)
+	swap_nodes(1, 5);
+	printf("Length of list is %d\n\n", list_length());
+	print_list();
+
+	//Swap values 5 and 1 (one root)
+	swap_nodes(3, 5);
+	printf("Length of list is %d\n\n", list_length());
+	print_list();
+
+	//Swap values 5 and 1 (one last)
+	swap_nodes(4, 2);
+	printf("Length of list is %d\n\n", list_length());
+	print_list();
+
+	//Swap values 2 and 5 (one root and one last)
+	swap_nodes(5, 2);
+	printf("Length of list is %d\n\n", list_length());
+	print_list();
+
+	//Swap values 1 and 1 (self swap)
+	swap_nodes(1, 1);
+	printf("Length of list is %d\n\n", list_length());
+	print_list();
+
+	//Swap values 1 and 1 (self swap last)
+	swap_nodes(5, 5);
+	printf("Length of list is %d\n\n", list_length());
+	print_list();
+
+	//Swap values 1 and 1 (self swap root)
+	swap_nodes(2, 2);
 	printf("Length of list is %d\n\n", list_length());
 	print_list();
 
