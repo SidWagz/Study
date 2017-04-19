@@ -2,11 +2,8 @@
 #import<stdio.h>
 #import<stdlib.h>
 
-// Import all common stored types
 #import "dstypes.h"
-
-// Define generic name for node
-typedef DoubleNode Node;
+#import "doubly.h"
 	
 // Create a new node from the int n
 Node* make_node (int n) {
@@ -19,17 +16,22 @@ Node* make_node (int n) {
 	return newnode;
 }
 
-// Declare all methods for the list
-int value_of (Node *node);
-Node* make_node (int n);
-void print_list (Node*);
-void insert (Node**, int);
-
 // Return the int value in the node
 int value_of (Node *node) {
 	if (node == NULL)
 		return -1;
 	return *(int*)(node->val);
+}
+
+int length_of (Node* ROOT) {
+
+	int length = 0;
+	Node *current = ROOT;
+
+	while (current != NULL && ++length)
+		current = current->next;
+
+	return length;
 }
 
 // Print the whole list chain
@@ -59,19 +61,4 @@ void insert (Node **ROOT, int n) {
 		current->next = newnode;
 		newnode->prev = current;
 	}
-}
-
-
-int main () {
-	// Define root of chain
-	Node *ROOT = NULL;
-
-	printf("\n");
-
-	// Insert some elements in list
-	insert(&ROOT, 1);
-	insert(&ROOT, 2);
-	insert(&ROOT, 3);
-
-	print_list(ROOT);
 }
