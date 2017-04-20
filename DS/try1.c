@@ -2,7 +2,6 @@
 #import<stdio.h>
 #import<stdlib.h>
 
-#import "dstypes.h"
 #import "singly.h"
 
 int main (int argc, char const *argv[]) {
