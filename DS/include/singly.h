@@ -12,5 +12,6 @@ int length_of (Node*);
 void insert (Node**, int);
 void delete (Node**, int);
 void swap (Node**, int, int);
+void sort(Node**);
 
 #endif

@@ -144,3 +144,81 @@ void swap(Node **ROOT, int a, int b) {
 	return;
 }
 
+//Declare sorting helper functions
+Node* _sort(Node*);
+Node* _sort_merge(Node*, Node*);
+
+//Sort list using merge sort
+void sort(Node **ROOT) {
+
+	*ROOT = _sort(*ROOT);
+}
+
+//Actual sorting funtion
+Node* _sort(Node* ROOT) {
+	
+	Node *start = ROOT;
+	Node *veryslow = NULL, *slow = start, *fast = start;
+
+	while (fast->next != NULL) {
+		fast = fast->next;
+		veryslow = slow;
+		slow = slow->next;
+		if (fast->next != NULL)
+			fast = fast->next;
+	}
+
+	if (veryslow == NULL) {
+		start->next = NULL;
+		return start;
+	}
+	else {
+		veryslow->next = NULL;
+		Node *left = _sort(start), *right = _sort(slow);
+		return _sort_merge(left, right);
+	}
+}
+
+//Merge for sort
+Node* _sort_merge(Node *left, Node *right) {
+
+	Node *list = NULL, *end;
+	if (value_of(left) < value_of(right)) {
+		list = left;
+		left = left->next;
+	}
+	else {
+		list = right;
+		right = right->next;
+	}
+	end = list;
+
+	while (left != NULL && right != NULL) {
+		if (value_of(left) < value_of(right)) {
+			end->next = left;
+			left = left->next;
+		}
+		else {
+			end->next = right;
+			right = right->next;
+		}
+		end = end->next;
+	}
+
+	if (left == NULL) {
+		while (right != NULL) {
+			end->next = right;
+			right = right->next;
+			end = end->next;
+		}
+	}
+	else if (right == NULL) {
+		while (left != NULL) {
+			end->next = left;
+			left = left->next;
+			end = end->next;
+		}
+	}
+	
+	return list;
+}
