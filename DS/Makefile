@@ -6,10 +6,13 @@ program_TRY_LIST := trylist
 program_ALL := $(program_SINGLY) $(program_DOUBLY) $(program_TRY_LIST)
 
 # c source directories
-source_DIR := ./impl
+source_IMPL_DIR := ./impl
+source_ADAPTER_DIR := ./adapter
+source_DIR := $(source_IMPL_DIR) $(source_ADAPTER_DIR)
 
 # all c source files
-program_C_SRCS := $(wildcard *.c) $(wildcard $(source_DIR)/*.c)
+program_C_SRCS := $(wildcard *.c)
+program_C_SRCS += $(foreach sourcedir, $(source_DIR), $(wildcard $(sourcedir)/*.c))
 
 # names all .o files, deriving from .c file names
 program_C_OBJS := $(program_C_SRCS:.c=.o)
@@ -30,7 +33,7 @@ header_DIR := ./include
 program_INCLUDE_DIRS := $(header_DIR)
 
 # link all library dirs
-program_LIBRARY_DIRS := ./structs
+program_LIBRARY_DIRS := 
 
 # link individual dirs
 program_LIBRARIES := 
@@ -63,4 +66,4 @@ clean:
 distclean: clean
 
 show:
-	@- echo $(program_SRCS)
+	@- echo $(program_C_SRCS)
