@@ -3,25 +3,23 @@
 #import<stdlib.h>
 
 #import "doubly.h"
-	
-// Create a new node from the int n
-Node* make_node (int n) {
-	Node *newnode = (Node*)malloc(sizeof(Node));
-	newnode->val = (int*)malloc(sizeof(int));
-	*(int*)(newnode->val) = n;
-	newnode->prev = NULL;
-	newnode->next = NULL;
+#import "dsspecial.h"
 
-	return newnode;
+/* List methods implemented */
+
+// Print the whole list chain
+void print_list (Node *ROOT) {
+	Node *current = ROOT;
+
+	printf("Current list:\n");
+	while (current != NULL) {
+		repr_format(current, "-> %s ");
+		current = current->next;
+	}
+	printf("\n\n");
 }
 
-// Return the int value in the node
-int value_of (Node *node) {
-	if (node == NULL)
-		return -1;
-	return *(int*)(node->val);
-}
-
+// Returns length of list
 int length_of (Node* ROOT) {
 
 	int length = 0;
@@ -33,21 +31,22 @@ int length_of (Node* ROOT) {
 	return length;
 }
 
-// Print the whole list chain
-void print_list (Node *ROOT) {
-	Node *current = ROOT;
+// Insert new node to head oflist
+void _insert_at_head (Node **ROOT, void *n) {
+	Node *newnode = (Node*)n;
 
-	printf("Current list:\n");
-	while (current != NULL) {
-		printf("-> %d ", value_of(current));
-		current = current->next;
+	if (*ROOT == NULL)
+		*ROOT = newnode;
+	else {
+		newnode->next = *ROOT;
+		(*ROOT)->prev = newnode;
+		*ROOT = newnode;
 	}
-	printf("\n\n");
 }
 
 // Insert function for list
-void insert (Node **ROOT, int n) {
-	Node *newnode = make_node(n);
+void _insert (Node **ROOT, void *n) {
+	Node *newnode = (Node*)n;
 
 	Node *current = *ROOT;
 
@@ -63,20 +62,21 @@ void insert (Node **ROOT, int n) {
 }
 
 // Delete a node from the list
-void delete (Node **ROOT, int n) {
+void _delete (Node **ROOT, void *n) {
 
 	Node *current = *ROOT;
 
 	if (current == NULL) {
-		printf("Cannot find node %d - List is empty\n", n);
+		val_format(n, "Cannot find node %s - List is empty\n");
 		return;
 	}
 
-	while (current != NULL && value_of(current) != n)
+	while (current != NULL 
+				&& check_value(current, n) != true)
 		current = current->next;
 
 	if (current == NULL) {
-		printf("Cannot find node %d - Not present in list\n", n);
+		val_format(n, "Cannot find node %s - Not present in list\n");
 		return;
 	}
 
@@ -97,33 +97,33 @@ void delete (Node **ROOT, int n) {
 }
 
 // Swap two nodes from the list
-void swap (Node **ROOT, int a, int b) {
+void _swap (Node **ROOT, void *a, void *b) {
 
 	if (*ROOT == NULL) {
-		printf("Cannot find nodes %d and %d - List is empty\n", a, b);
+		val_format2(a, b, "Cannot find nodes %s and %s - List is empty\n");
 		return;
 	}
 
 	Node *prev_a = NULL, *curr_a = *ROOT;
 	Node *prev_b = NULL, *curr_b = *ROOT;
 
-	while (curr_a != NULL && value_of(curr_a) != a) {
+	while (curr_a != NULL && check_value(curr_a, a) != true) {
 		prev_a = curr_a;
 		curr_a = curr_a->next;
 	}
 
-	while (curr_b != NULL && value_of(curr_b) != b) {
+	while (curr_b != NULL && check_value(curr_b, b) != true) {
 		prev_b = curr_b;
 		curr_b = curr_b->next;
 	}
 
 	if (curr_a == NULL) {
-		printf("Cannot find node %d - Not present in list\n", a);
+		val_format(a, "Cannot find node %s - Not present in list\n");
 		return;
 	}
 	
 	if (curr_b == NULL) {
-		printf("Cannot find node %d - Not present in list\n", b);
+		val_format(b, "Cannot find node %s - Not present in list\n");
 		return;
 	}
 
@@ -163,15 +163,14 @@ void swap (Node **ROOT, int a, int b) {
 }
 
 // Helper functions for list merge sort
-Node* _sort(Node*);
+Node* _recur_sort(Node*);
 Node* _merge_sort(Node*, Node*);
 
-void sort (Node **ROOT) {
-
-	*ROOT = _sort(*ROOT);
+void _sort(Node** ROOT) {
+	*ROOT = _recur_sort(*ROOT);
 }
 
-Node* _sort (Node *ROOT) {
+Node* _recur_sort (Node *ROOT) {
 
 	if (ROOT == NULL)
 		return NULL;
@@ -194,7 +193,7 @@ Node* _sort (Node *ROOT) {
 	}
 	else {
 		veryslow->next = NULL;
-		Node *left = _sort(start), *right = _sort(slow);
+		Node *left = _recur_sort(start), *right = _recur_sort(slow);
 		return _merge_sort(left, right);
 	}
 }
@@ -203,7 +202,7 @@ Node* _merge_sort (Node *left, Node *right) {
 
 	Node *newstart;
 
-	if (value_of(left) <= value_of(right)) {
+	if (compare(left, right) <= 0) {
 		newstart = left;
 		left->prev = NULL;
 		left = left->next;
@@ -217,7 +216,7 @@ Node* _merge_sort (Node *left, Node *right) {
 	Node *newend = newstart;
 
 	while (left != NULL && right != NULL) {
-		if (value_of(left) <= value_of(right)) {
+		if (compare(left, right) <= 0) {
 			newend->next = left;
 			left->prev = newend;
 			left = left->next;

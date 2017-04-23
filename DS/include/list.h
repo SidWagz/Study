@@ -19,6 +19,7 @@ int length_of(Node*);
 // Modifying functions
 void _insert_at_head(Node**, void*);
 void _insert(Node**, void*);
+void* _delete_head(Node**);
 void _delete(Node**, void*);
 void _swap(Node**, void*, void*);
 void _sort(Node**);

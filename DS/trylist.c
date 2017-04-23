@@ -19,7 +19,6 @@ int main (int argc, char const *argv[]) {
 	//Create list and print it
 	printboldln("Insert 1, 2, 3, 4");
 
-	// int a=1, b=2, c=3, d=4;
 	insert(&ROOT, 1);
 	insert(&ROOT, 2);
 	insert(&ROOT, 3);

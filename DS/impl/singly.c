@@ -25,11 +25,22 @@ int length_of(Node *ROOT) {
 	int length = 0;
 
 	Node *current = ROOT;
-	while (current != NULL) {
+	while (current != NULL && ++length)
 		current = current->next;
-		length++;
-	}
+
 	return length;
+}
+
+// Insert new node to head oflist
+void _insert_at_head (Node **ROOT, void *n) {
+	Node *newnode = (Node*)n;
+
+	if (*ROOT == NULL)
+		*ROOT = newnode;
+	else {
+		newnode->next = *ROOT;
+		*ROOT = newnode;
+	}
 }
 
 // Insert new node to list
@@ -46,6 +57,21 @@ void _insert(Node **ROOT, void *n) {
 		current = current->next;
 
 	current->next = newnode;
+}
+
+// Delete the head node from list
+void* _delete_head(Node **ROOT) {
+
+	// // Skip 'empty' check - should be done from higher implementation
+	// if (*ROOT == NULL)
+	// 	printf("Cannot remove head - List is emptys\n\n");
+
+	Node *t = *ROOT;
+	*ROOT = (*ROOT)->next;
+
+	void *r = t->val;
+	free(t);
+	return r;
 }
 
 // Delete a node from list
