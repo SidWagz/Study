@@ -3,12 +3,13 @@
 #import<stdlib.h>
 
 #import "singly.h"
+#import "dsspecial.h"
 
-//Definition for 'int' value list
+/* Definition for 'int' value list */
 Node* make_node(int n);
-int value_of (Node*);
+int value_of(Node*);
 
-//Get new node
+// Get new node
 Node* make_node(int n) {
 	Node *newnode = (Node*)malloc(sizeof(Node));
 	newnode->val = malloc(sizeof(int));
@@ -17,28 +18,37 @@ Node* make_node(int n) {
 	return newnode;
 }
 
-//Get value from Node
+// Get value from Node
 int value_of(Node *node) {
 	if (node == NULL)
 		return -1;
 	return *(int*)(node->val);
 }
 
-// Singly methods implemented
+// Get string value of the 'int' type node
+char* repr(Node *node) {
+	int len = snprintf(NULL, 0, "%d", value_of(node));
+	char *s = (char*)malloc(len+1);
+	sprintf(s, "%d", value_of(node));
+	return s;
+}
 
-//Print the list chain
+/* List methods implemented */
+
+// Print the list chain
 void print_list(Node *ROOT) {
 
 	printf("List chain\n");
 	Node *current = ROOT;
 	while (current != NULL) {
-		printf(" -> %d", *(int*)(current->val));
+		repr_format(current, " -> %s");
+		// printf(" -> %d", *(int*)(current->val));
 		current = current->next;
 	}
 	printf("\n\n");
 }
 
-//Returns length of list
+// Returns length of list
 int length_of(Node *ROOT) {
 
 	int length = 0;
@@ -51,7 +61,7 @@ int length_of(Node *ROOT) {
 	return length;
 }
 
-//Insert new node to list
+// Insert new node to list
 void insert(Node **ROOT, int n) {
 	Node *newnode = make_node(n);
 
@@ -67,7 +77,7 @@ void insert(Node **ROOT, int n) {
 	current->next = newnode;
 }
 
-//Delete a node from list
+// Delete a node from list
 void delete(Node **ROOT, int n) {
 
 	Node *prev = NULL, *current = *ROOT;
@@ -98,7 +108,7 @@ void delete(Node **ROOT, int n) {
 	free(t);
 }
 
-//Swap the two nodes if both node values exist in the list
+// Swap the two nodes if both node values exist in the list
 void swap(Node **ROOT, int a, int b) {
 
 	if (*ROOT == NULL) {
