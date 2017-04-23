@@ -1,6 +1,7 @@
 
 # all targets to run
 program_SINGLY := singly
+program_SINGLY_INT := singly.int
 program_DOUBLY := doubly
 program_TRY_LIST := trylist
 program_ALL := $(program_SINGLY) $(program_DOUBLY) $(program_TRY_LIST)
@@ -9,6 +10,12 @@ program_ALL := $(program_SINGLY) $(program_DOUBLY) $(program_TRY_LIST)
 source_IMPL_DIR := ./impl
 source_ADAPTER_DIR := ./adapter
 source_DIR := $(source_IMPL_DIR) $(source_ADAPTER_DIR)
+
+# individual source files
+source_SINGLY = $(source_IMPL_DIR)/$(program_SINGLY).c
+source_SINGLY_INT = $(source_ADAPTER_DIR)/$(program_SINGLY_INT).c
+source_DOUBLY = $(source_IMPL_DIR)/$(program_DOUBLY).c
+source_TRY_LIST = $(program_TRY_LIST).c
 
 # all c source files
 program_C_SRCS := $(wildcard *.c)
@@ -21,9 +28,10 @@ program_C_OBJS := $(program_C_SRCS:.c=.o)
 program_OBJS := $(program_C_OBJS)
 
 # individual object files
-object_SINGLY = singly.o
-object_DOUBLY = doubly.o
-object_TRY_LIST = trylist.o
+object_SINGLY = $(program_SINGLY).o
+object_SINGLY_INT = $(program_SINGLY_INT).o
+object_DOUBLY = $(program_DOUBLY).o
+object_TRY_LIST = $(program_TRY_LIST).o
 
 ## include header files for different runs
 
@@ -50,18 +58,22 @@ LDFLAGS += $(foreach library, $(program_LIBRARIES), -l$(library))
 .PHONY: all clean distclean $(program_ALL)
 
 $(object_SINGLY):
-	$(COMPILE.c) $(source_DIR)/$(program_SINGLY).c
+	$(COMPILE.c) $(source_SINGLY) -o $(source_IMPL_DIR)//$(object_SINGLY)
 
-$(program_SINGLY): $(program_SINGLY).o
+$(object_SINGLY_INT): $(object_SINGLY)
+	$(COMPILE.c) $(source_SINGLY_INT) -o $(source_ADAPTER_DIR)/$(object_SINGLY_INT)
 
-$(program_DOUBLY): $(program_SINGLY).o
+$(program_SINGLY): $(object_SINGLY)
 
-$(program_TRY_LIST): $(run) $(object_TRY_LIST)
-	$(LINK.c) $(object_TRY_LIST) $(run).o -o $(program_TRY_LIST)
+$(program_DOUBLY): $(object_DOUBLY)
+
+$(program_TRY_LIST): $(run).$(type).o $(object_TRY_LIST)
+	$(LINK.c) $(object_TRY_LIST) $(source_ADAPTER_DIR)/$(run).$(type).o $(source_IMPL_DIR)/$(run).o -o $(program_TRY_LIST)
 
 clean:
 	@- $(RM) $(program_ALL)
 	@- $(RM) $(program_OBJS)
+	@- $(RM) ./*.o
 
 distclean: clean
 

@@ -4,6 +4,11 @@
 
 // Declaration for all generic 'list' function
 
+// Compare functions
+int check_value(Node*, void*);
+int compare(Node*, Node*);
+int equal(Node*, Node*);
+
 // Access functions
 char* repr(Node*);
 
@@ -12,10 +17,10 @@ void print_list(Node*);
 int length_of(Node*);
 
 // Modifying functions
-void insert_at_head(Node**);
-void insert(Node**, int);
-void delete(Node**, int);
-void swap(Node**, int, int);
-void sort(Node**);
+void _insert_at_head(Node**, void*);
+void _insert(Node**, void*);
+void _delete(Node**, void*);
+void _swap(Node**, void*, void*);
+void _sort(Node**);
 
 #endif
