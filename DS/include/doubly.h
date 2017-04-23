@@ -8,9 +8,12 @@
 typedef DoubleNode Node;
 
 // Declare all methods for the list
-int value_of (Node *node);
 void print_list (Node*);
-void insert (Node**, int);
+int value_of (Node*);
 int length_of (Node*);
+void insert (Node**, int);
+void delete (Node**, int);
+void swap (Node**, int, int);
+void sort(Node**);
 
 #endif
