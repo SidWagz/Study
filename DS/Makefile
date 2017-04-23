@@ -6,7 +6,7 @@ program_TRY_LIST := trylist
 program_ALL := $(program_SINGLY) $(program_DOUBLY) $(program_TRY_LIST)
 
 # c source directories
-source_DIR := ./structs
+source_DIR := ./impl
 
 # all c source files
 program_C_SRCS := $(wildcard *.c) $(wildcard $(source_DIR)/*.c)
