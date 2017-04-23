@@ -2,7 +2,8 @@
 #import<stdio.h>
 #import<stdlib.h>
 
-#import "singly.h"
+#import "doubly.h"
+
 
 int main (int argc, char const *argv[]) {
 
@@ -81,7 +82,7 @@ int main (int argc, char const *argv[]) {
 	//Swap values 1 and 1 (self swap root)
 	swap(&ROOT, 2, 2);
 	printf("Length of list is %d\n\n", length_of(ROOT));
-	print_list(ROOT);	
+	print_list(ROOT);
 
 	// Sort the list
 	sort(&ROOT);
