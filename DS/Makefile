@@ -5,8 +5,11 @@ program_DOUBLY := doubly
 program_TRY_LIST := trylist
 program_ALL := $(program_SINGLY) $(program_DOUBLY) $(program_TRY_LIST)
 
+# c source directories
+source_DIR := ./structs
+
 # all c source files
-program_C_SRCS := $(wildcard *.c)
+program_C_SRCS := $(wildcard *.c) $(wildcard $(source_DIR)/*.c)
 
 # names all .o files, deriving from .c file names
 program_C_OBJS := $(program_C_SRCS:.c=.o)
@@ -27,7 +30,7 @@ header_DIR := ./include
 program_INCLUDE_DIRS := $(header_DIR)
 
 # link all library dirs
-program_LIBRARY_DIRS := 
+program_LIBRARY_DIRS := ./structs
 
 # link individual dirs
 program_LIBRARIES := 
@@ -43,15 +46,21 @@ LDFLAGS += $(foreach library, $(program_LIBRARIES), -l$(library))
 
 .PHONY: all clean distclean $(program_ALL)
 
-$(program_SINGLY): $(object_SINGLY)
+$(object_SINGLY):
+	$(COMPILE.c) $(source_DIR)/$(program_SINGLY).c
 
-$(program_DOUBLY): $(object_DOUBLY)
+$(program_SINGLY): $(program_SINGLY).o
+
+$(program_DOUBLY): $(program_SINGLY).o
 
 $(program_TRY_LIST): $(run) $(object_TRY_LIST)
-	$(LINK.cc) $(object_TRY_LIST) $(run).o -o $(program_TRY_LIST)
+	$(LINK.c) $(object_TRY_LIST) $(run).o -o $(program_TRY_LIST)
 
 clean:
 	@- $(RM) $(program_ALL)
 	@- $(RM) $(program_OBJS)
 
 distclean: clean
+
+show:
+	@- echo $(program_SRCS)
