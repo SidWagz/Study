@@ -55,9 +55,8 @@ void insert(Node **ROOT, int n) {
 	}
 
 	Node *current = *ROOT;
-	while (current->next != NULL) {
+	while (current->next != NULL)
 		current = current->next;
-	}
 
 	current->next = newnode;
 }
@@ -66,15 +65,16 @@ void insert(Node **ROOT, int n) {
 void delete(Node **ROOT, int n) {
 
 	Node *prev = NULL, *current = *ROOT;
-	while (current->next != NULL 
-				&& value_of(current) != n) {
-		prev = current;
-		current = current->next;
-	}
 
 	if (current == NULL) {
 		printf("Cannot find node %d - List is empty\n\n", n);
 		return;
+	}
+
+	while (current->next != NULL 
+				&& value_of(current) != n) {
+		prev = current;
+		current = current->next;
 	}
 	
 	if (value_of(current) != n) {
@@ -83,16 +83,23 @@ void delete(Node **ROOT, int n) {
 	}
 	
 	Node *t = current;
-	if (prev == NULL) {
+	if (prev == NULL)
 		*ROOT = current->next;
-	}
-	else {
+	else
 		prev->next = current->next;
-	}	
+
+	t->next = NULL;
+	free(t);
 }
 
 //Swap the two nodes if both node values exist in the list
 void swap(Node **ROOT, int a, int b) {
+
+	if (*ROOT == NULL) {
+		printf("Cannot find nodes %d and %d - List is empty\n\n", a, b);
+		return;
+	}
+
 	Node *prev_a = NULL, *curr_a = *ROOT;
 	Node *prev_b = NULL, *curr_b = *ROOT;
 
@@ -108,11 +115,6 @@ void swap(Node **ROOT, int a, int b) {
 		curr_b = curr_b->next;
 	}
 
-	if (curr_a == NULL || curr_b == NULL) {
-		printf("Cannot find nodes %d and %d - List is empty\n\n", a, b);
-		return;
-	}
-
 	if (value_of(curr_a) != a) {
 		printf("Cannot find node %d = Not in List\n\n", a);
 		return;
@@ -122,19 +124,15 @@ void swap(Node **ROOT, int a, int b) {
 		return;
 	}
 
-	if (prev_a == NULL) {
+	if (prev_a == NULL)
 		*ROOT = curr_b;
-	}
-	else {
+	else
 		prev_a->next = curr_b;
-	}
 	
-	if (prev_b == NULL) {
+	if (prev_b == NULL)
 		*ROOT = curr_a;
-	}
-	else {
+	else
 		prev_b->next = curr_a;
-	}
 
 	Node *t = curr_a->next;
 	curr_a->next = curr_b->next;
@@ -155,6 +153,9 @@ void sort(Node **ROOT) {
 
 //Actual sorting funtion
 Node* _sort(Node* ROOT) {
+
+	if (ROOT == NULL)
+		return NULL;
 	
 	Node *start = ROOT;
 	Node *veryslow = NULL, *slow = start, *fast = start;
@@ -182,7 +183,7 @@ Node* _sort(Node* ROOT) {
 Node* _sort_merge(Node *left, Node *right) {
 
 	Node *list = NULL, *end;
-	if (value_of(left) < value_of(right)) {
+	if (value_of(left) <= value_of(right)) {
 		list = left;
 		left = left->next;
 	}
@@ -204,20 +205,17 @@ Node* _sort_merge(Node *left, Node *right) {
 		end = end->next;
 	}
 
-	if (left == NULL) {
-		while (right != NULL) {
-			end->next = right;
-			right = right->next;
-			end = end->next;
-		}
+	while (left != NULL) {
+		end->next = left;
+		left = left->next;
+		end = end->next;
 	}
-	else if (right == NULL) {
-		while (left != NULL) {
-			end->next = left;
-			left = left->next;
-			end = end->next;
-		}
+
+	while (right != NULL) {
+		end->next = right;
+		right = right->next;
+		end = end->next;
 	}
-	
+
 	return list;
 }
