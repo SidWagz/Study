@@ -4,6 +4,10 @@
 
 #import "singly.h"
 
+//Definition for 'int' value list
+Node* make_node(int n);
+int value_of (Node*);
+
 //Get new node
 Node* make_node(int n) {
 	Node *newnode = (Node*)malloc(sizeof(Node));
@@ -12,6 +16,15 @@ Node* make_node(int n) {
 	newnode->next = NULL;
 	return newnode;
 }
+
+//Get value from Node
+int value_of(Node *node) {
+	if (node == NULL)
+		return -1;
+	return *(int*)(node->val);
+}
+
+// Singly methods implemented
 
 //Print the list chain
 void print_list(Node *ROOT) {
@@ -23,13 +36,6 @@ void print_list(Node *ROOT) {
 		current = current->next;
 	}
 	printf("\n\n");
-}
-
-//Get value from Node
-int value_of(Node *node) {
-	if (node == NULL)
-		return -1;
-	return *(int*)(node->val);
 }
 
 //Returns length of list
