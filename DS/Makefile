@@ -2,8 +2,8 @@
 # all targets to run
 program_SINGLY := singly
 program_DOUBLY := doubly
-program_TRY_ONE := try1
-program_ALL := $(program_SINGLY) $(program_DOUBLY) $(program_TRY_ONE)
+program_TRY_LIST := trylist
+program_ALL := $(program_SINGLY) $(program_DOUBLY) $(program_TRY_LIST)
 
 # all c source files
 program_C_SRCS := $(wildcard *.c)
@@ -17,7 +17,7 @@ program_OBJS := $(program_C_OBJS)
 # individual object files
 object_SINGLY = singly.o
 object_DOUBLY = doubly.o
-object_TRY_ONE = try1.o
+object_TRY_LIST = trylist.o
 
 ## include header files for different runs
 
@@ -47,8 +47,8 @@ $(program_SINGLY): $(object_SINGLY)
 
 $(program_DOUBLY): $(object_DOUBLY)
 
-$(program_TRY_ONE): $(run) $(object_TRY_ONE)
-	$(LINK.cc) $(object_TRY_ONE) $(run).o -o $(program_TRY_ONE)
+$(program_TRY_LIST): $(run) $(object_TRY_LIST)
+	$(LINK.cc) $(object_TRY_LIST) $(run).o -o $(program_TRY_LIST)
 
 clean:
 	@- $(RM) $(program_ALL)
