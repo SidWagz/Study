@@ -26,4 +26,14 @@ struct DoubleNode
 	DoubleNode *next;
 };
 
+// Define new node struct type
+// for basic binary tree
+typedef struct BasicBinaryTreeNode BasicBinaryTreeNode;
+struct BasicBinaryTreeNode
+{
+	void *val;
+	BasicBinaryTreeNode *left;
+	BasicBinaryTreeNode *right;
+};
+
 #endif
